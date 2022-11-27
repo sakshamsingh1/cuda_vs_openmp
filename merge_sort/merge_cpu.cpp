@@ -1,5 +1,7 @@
 #include<stdlib.h>
 #include "util.h"
+#include <sys/time.h>
+#include <iostream>
 
 using namespace std;
 
@@ -41,13 +43,22 @@ int main(int argc, char **argv) {
     int size;
     parseArgs(argc, argv, size);
 
+    struct timeval tv1, tv2;
+    struct timezone tz;
+    double elapsed;
+
     int *arr = (int*) malloc(size * sizeof(int));
 
     initializeRandomArray(arr, size);
 
     // sort
+    gettimeofday(&tv1, &tz);
     mergeSort(arr, 0, size-1);
-
+    gettimeofday(&tv2, &tz);
     //printArray(arr, arrSize);
+
+    elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
+    printf("elapsed time = %f seconds.\n", elapsed);
+
     return 0;
 }

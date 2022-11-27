@@ -5,6 +5,7 @@
 #include <cstring>
 #include <algorithm>
 #include "util.h"
+#include <sys/time.h>
 
 void merge(int arr[], int l, int m, int r, int* tempBuffer) {
 
@@ -46,9 +47,15 @@ int main(int argc, char **argv) {
     parseArgs(argc, argv, arrSize);
     int arrSizeBytes = arrSize * sizeof(int);
 
+    struct timeval tv1, tv2;
+    struct timezone tz;
+    double elapsed;
+
     int *arr = (int*)malloc(arrSizeBytes);
     initializeRandomArray(arr, arrSize);
     int *tempBuffer = (int*)malloc(arrSizeBytes);
+
+    gettimeofday(&tv1, &tz);
 
     omp_set_nested(1);
     #pragma omp target data map(tofrom:tempBuffer[0:arrSize]) map(tofrom:arr[0:arrSize])
@@ -77,6 +84,10 @@ int main(int argc, char **argv) {
             merge(arr, 0, vectorLengthPerThread / 2 - 1, arrSize, tempBuffer);
         }
     }
+
+    gettimeofday(&tv2, &tz);
+    elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
+    printf("elapsed time = %f seconds.\n", elapsed);
 
     return 0;
 }

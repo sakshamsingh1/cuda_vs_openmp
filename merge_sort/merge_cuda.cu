@@ -2,14 +2,10 @@
 #include <sys/time.h>
 #include "util.h"
 
-long readList(long**);
+void mergesort(int*, long, dim3, dim3);
 
-void mergesort(long*, long, dim3, dim3);
-
-__global__ void gpu_mergesort(long*, long*, long, long, long, dim3*, dim3*);
-__device__ void gpu_bottomUpMerge(long*, long*, long, long, long);
-
-int tm();
+__global__ void gpu_mergesort(int*, int*, long, long, long, dim3*, dim3*);
+__device__ void gpu_bottomUpMerge(int*, int*, long, long, long);
 
 #define min(a, b) (a < b ? a : b)
 
@@ -18,44 +14,43 @@ int main(int argc, char** argv) {
     int size;
     parseArgs(argc, argv, size);
 
-    int *arr = (int*)malloc(size);
+    int *arr = (int*)malloc(size * sizeof(int));
+    struct timeval tv1, tv2;
+    struct timezone tz;
+    double elapsed;
+
     initializeRandomArray(arr, size);
 
-    dim3 threadsPerBlock();
-    dim3 blocksPerGrid;
+    dim3 threadsPerBlock(128,32,1);
+    dim3 blocksPerGrid(128,32,1);
 
-    threadsPerBlock.x = 32;
-    threadsPerBlock.y = 1;
-    threadsPerBlock.z = 1;
+//    threadsPerBlock.x = 512;
+//    threadsPerBlock.y = 512;
+//    threadsPerBlock.z = 1;
+//
+//    blocksPerGrid.x = 512;
+//    blocksPerGrid.y = 512;
+//    blocksPerGrid.z = 1;
 
-    blocksPerGrid.x = 8;
-    blocksPerGrid.y = 1;
-    blocksPerGrid.z = 1;
-
+    gettimeofday(&tv1, &tz);
     mergesort(arr, size, threadsPerBlock, blocksPerGrid);
-
-    tm();
-
-    // print arr
-//    for (int i = 0; i < size; i++) {
-//        std::cout << arr[i] << '\n';
-//    }
+    gettimeofday(&tv2, &tz);
+    elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
+    printf("elapsed time = %f seconds.\n", elapsed);
 }
 
-void mergesort(long* data, long size, dim3 threadsPerBlock, dim3 blocksPerGrid) {
-
-    long* D_data;
-    long* D_swp;
+void mergesort(int* data, long size, dim3 threadsPerBlock, dim3 blocksPerGrid) {
+    int* D_data;
+    int* D_swp;
     dim3* D_threads;
     dim3* D_blocks;
     
     // Actually allocate the two arrays
-    tm();
-    cudaMalloc((void**) &D_data, size * sizeof(long));
-    cudaMalloc((void**) &D_swp, size * sizeof(long));
+    cudaMalloc((void**) &D_data, size * sizeof(int));
+    cudaMalloc((void**) &D_swp, size * sizeof(int));
 
     // Copy from our input list into the first array
-    cudaMemcpy(D_data, data, size * sizeof(long), cudaMemcpyHostToDevice);
+    cudaMemcpy(D_data, data, size * sizeof(int), cudaMemcpyHostToDevice);
 
     cudaMalloc((void**) &D_threads, sizeof(dim3));
     cudaMalloc((void**) &D_blocks, sizeof(dim3));
@@ -63,8 +58,8 @@ void mergesort(long* data, long size, dim3 threadsPerBlock, dim3 blocksPerGrid) 
     cudaMemcpy(D_threads, &threadsPerBlock, sizeof(dim3), cudaMemcpyHostToDevice);
     cudaMemcpy(D_blocks, &blocksPerGrid, sizeof(dim3), cudaMemcpyHostToDevice);
 
-    long* A = D_data;
-    long* B = D_swp;
+    int* A = D_data;
+    int* B = D_swp;
 
     long nThreads = threadsPerBlock.x * threadsPerBlock.y * threadsPerBlock.z *
                     blocksPerGrid.x * blocksPerGrid.y * blocksPerGrid.z;
@@ -78,7 +73,6 @@ void mergesort(long* data, long size, dim3 threadsPerBlock, dim3 blocksPerGrid) 
         B = B == D_data ? D_swp : D_data;
     }
 
-    tm();
     cudaMemcpy(data, A, size * sizeof(long), cudaMemcpyDeviceToHost);
     
     // Free the GPU memory
@@ -96,7 +90,7 @@ __device__ unsigned int getIdx(dim3* threads, dim3* blocks) {
            blockIdx.z  * (x *= blocks->y);
 }
 
-__global__ void gpu_mergesort(long* source, long* dest, long size, long width, long slices, dim3* threads, dim3* blocks) {
+__global__ void gpu_mergesort(int* source, int* dest, long size, long width, long slices, dim3* threads, dim3* blocks) {
     unsigned int idx = getIdx(threads, blocks);
     long start = width*idx*slices, 
          middle, 
@@ -113,7 +107,7 @@ __global__ void gpu_mergesort(long* source, long* dest, long size, long width, l
     }
 }
 
-__device__ void gpu_bottomUpMerge(long* source, long* dest, long start, long middle, long end) {
+__device__ void gpu_bottomUpMerge(int* source, int* dest, long start, long middle, long end) {
     long i = start;
     long j = middle;
     for (long k = start; k < end; k++) {
@@ -125,13 +119,4 @@ __device__ void gpu_bottomUpMerge(long* source, long* dest, long start, long mid
             j++;
         }
     }
-}
-
-timeval tStart;
-int tm() {
-    timeval tEnd;
-    gettimeofday(&tEnd, 0);
-    int t = (tEnd.tv_sec - tStart.tv_sec) * 1000000 + tEnd.tv_usec - tStart.tv_usec;
-    tStart = tEnd;
-    return t;
 }

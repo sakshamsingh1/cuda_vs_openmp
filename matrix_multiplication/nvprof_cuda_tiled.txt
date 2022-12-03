@@ -1,0 +1,54 @@
+==1951793== Profiling application: ./cuda_tiled_mul 10 10
+==1951793== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   46.76%  3.4560us         1  3.4560us  3.4560us  3.4560us  mm_kernel_tiled(float*, float*, float*, int)
+                   32.89%  2.4310us         2  1.2150us  1.0240us  1.4070us  [CUDA memcpy HtoD]
+                   20.35%  1.5040us         1  1.5040us  1.5040us  1.5040us  [CUDA memcpy DtoH]
+      API calls:   99.36%  138.15ms         3  46.051ms  3.1960us  138.15ms  cudaMalloc
+                    0.39%  544.98us         3  181.66us  3.3360us  536.06us  cudaFree
+                    0.17%  230.60us       101  2.2830us     122ns  100.85us  cuDeviceGetAttribute
+                    0.03%  44.774us         3  14.924us  4.6010us  22.677us  cudaMemcpy
+                    0.02%  31.429us         1  31.429us  31.429us  31.429us  cuDeviceGetName
+                    0.02%  27.375us         1  27.375us  27.375us  27.375us  cudaLaunchKernel
+                    0.01%  8.3840us         2  4.1920us  4.1050us  4.2790us  cudaThreadSynchronize
+                    0.00%  5.7720us         1  5.7720us  5.7720us  5.7720us  cuDeviceGetPCIBusId
+                    0.00%  1.1540us         3     384ns     134ns     798ns  cuDeviceGetCount
+                    0.00%     675ns         2     337ns     126ns     549ns  cuDeviceGet
+                    0.00%     377ns         1     377ns     377ns     377ns  cuDeviceGetUuid
+                    0.00%     292ns         1     292ns     292ns     292ns  cuDeviceTotalMem
+==1951905== Profiling application: ./cuda_tiled_mul 100 100
+==1951905== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   41.89%  8.0960us         1  8.0960us  8.0960us  8.0960us  mm_kernel_tiled(float*, float*, float*, int)
+                   34.94%  6.7520us         2  3.3760us  3.2640us  3.4880us  [CUDA memcpy HtoD]
+                   23.17%  4.4790us         1  4.4790us  4.4790us  4.4790us  [CUDA memcpy DtoH]
+      API calls:   99.60%  131.21ms         3  43.737ms  3.1020us  131.20ms  cudaMalloc
+                    0.18%  235.58us       101  2.3320us     121ns  103.94us  cuDeviceGetAttribute
+                    0.09%  122.81us         3  40.937us  3.2520us  113.76us  cudaFree
+                    0.07%  94.425us         3  31.475us  18.858us  45.966us  cudaMemcpy
+                    0.02%  32.445us         1  32.445us  32.445us  32.445us  cuDeviceGetName
+                    0.02%  23.285us         1  23.285us  23.285us  23.285us  cudaLaunchKernel
+                    0.01%  13.046us         2  6.5230us  3.8950us  9.1510us  cudaThreadSynchronize
+                    0.00%  5.7460us         1  5.7460us  5.7460us  5.7460us  cuDeviceGetPCIBusId
+                    0.00%  1.0130us         3     337ns     142ns     681ns  cuDeviceGetCount
+                    0.00%     777ns         2     388ns     156ns     621ns  cuDeviceGet
+                    0.00%     355ns         1     355ns     355ns     355ns  cuDeviceTotalMem
+                    0.00%     202ns         1     202ns     202ns     202ns  cuDeviceGetUuid
+==1951989== Profiling application: ./cuda_tiled_mul 1000 1000
+==1951989== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   34.68%  1.5279ms         1  1.5279ms  1.5279ms  1.5279ms  [CUDA memcpy DtoH]
+                   34.49%  1.5194ms         1  1.5194ms  1.5194ms  1.5194ms  mm_kernel_tiled(float*, float*, float*, int)
+                   30.83%  1.3584ms         2  679.18us  679.07us  679.29us  [CUDA memcpy HtoD]
+      API calls:   92.93%  134.20ms         3  44.735ms  124.78us  133.95ms  cudaMalloc
+                    3.07%  4.4316ms         3  1.4772ms  846.13us  2.7297ms  cudaMemcpy
+                    2.74%  3.9527ms         3  1.3176ms  146.45us  3.6298ms  cudaFree
+                    1.06%  1.5253ms         2  762.63us  4.9690us  1.5203ms  cudaThreadSynchronize
+                    0.16%  226.12us       101  2.2380us     122ns  99.721us  cuDeviceGetAttribute
+                    0.02%  34.235us         1  34.235us  34.235us  34.235us  cuDeviceGetName
+                    0.02%  30.673us         1  30.673us  30.673us  30.673us  cudaLaunchKernel
+                    0.00%  5.5020us         1  5.5020us  5.5020us  5.5020us  cuDeviceGetPCIBusId
+                    0.00%  4.2360us         2  2.1180us     136ns  4.1000us  cuDeviceGet
+                    0.00%  1.1780us         3     392ns     140ns     860ns  cuDeviceGetCount
+                    0.00%     670ns         1     670ns     670ns     670ns  cuDeviceGetUuid
+                    0.00%     364ns         1     364ns     364ns     364ns  cuDeviceTotalMem

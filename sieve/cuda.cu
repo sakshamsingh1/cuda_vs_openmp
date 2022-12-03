@@ -19,10 +19,11 @@ int main(int argc, char** argv){
     struct timeval tv1, tv2;
     struct timezone tz;
     double elapsed; 
-    
+
     bool* d_is_composite;
     cudaMalloc((void**)&d_is_composite, (N+1)*sizeof(bool));
-    cudaMemset(d_is_composite, 0, (N+1)*sizeof(bool));
+    cudaMemcpy(d_is_composite, is_composite, (N+1)*sizeof(bool), cudaMemcpyHostToDevice);
+
     gettimeofday(&tv1, &tz);
     for(int i = 2; i <= sqrt(N); i++){
         if(!is_composite[i]){

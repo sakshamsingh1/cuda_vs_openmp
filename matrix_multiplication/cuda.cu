@@ -57,12 +57,12 @@ int main(int argc, char** argv){
     cudaFree(C_c);
 
     // printArr(C, N);
-    bool all_good = checkCorrectness(C, N);
+/*    bool all_good = checkCorrectness(C, N);
     if(all_good)
         cout << "Correctness check passed" << endl;
     else
         cout << "Correctness check failed" << endl;
-    
+ */   
     elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
     printf("elapsed time = %f seconds.\n", elapsed);
 }

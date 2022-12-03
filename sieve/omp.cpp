@@ -34,6 +34,6 @@ int main(int argc, char** argv)
     gettimeofday(&tv2, &tz);
     elapsed = (double) (tv2.tv_sec-tv1.tv_sec) + (double) (tv2.tv_usec-tv1.tv_usec) * 1.e-6;
     printf("elapsed time = %f seconds.\n", elapsed);
-    printArr(is_composite, N);
+//    printArr(is_composite, N);
 
 }

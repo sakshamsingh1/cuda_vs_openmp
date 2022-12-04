@@ -28,15 +28,14 @@ int recenter(int n, int k, Pixel* pixels, Cluster* clusters) {
 
 		for (int j = 0; j < count; ++j) {
 			Pixel* pixel = &pixels[cluster->pixels[j]];
-			sum.x += pixel->x; sum.y += pixel->y; sum.z += pixel->z;
+			sum.x += pixel->x; sum.y += pixel->y;
 		}
 		if (count > 0){
 			Cluster copy = clusters[i];
 			clusters[i].x = sum.x / count;
 			clusters[i].y = sum.y / count;
-			clusters[i].z = sum.z / count;
 
-			if (copy.x != clusters[i].x || copy.y != clusters[i].y || copy.z != clusters[i].z) {
+			if (copy.x != clusters[i].x || copy.y != clusters[i].y) {
 				return 0;
 			}
 		}
@@ -133,7 +132,7 @@ int main(int argc, char * argv[]) {
 		while(idx < n_pixels){
 			int min_dist = INT_MAX, min_cluster, dist;
 			for (int j = 0; j < K; ++j) {
-				dist = square((pixels[idx].x - clusters[j].x))+ square((pixels[idx].y - clusters[j].y)) + square((pixels[idx].z - clusters[j].z));
+				dist = square((pixels[idx].x - clusters[j].x))+ square((pixels[idx].y - clusters[j].y));
 				if (dist < min_dist) {
 					min_dist = dist;
 					min_cluster = j;

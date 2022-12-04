@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sys/time.h>
 #include "util.h"
 #include <stdio.h>
 #include <cuda.h>
@@ -11,10 +10,6 @@ __global__ void merge_sort_kernel(int*, int*, int, int);
 int main(int argc, char** argv){
     int N;
     parseArgs(argc, argv, N);
-    
-    struct timeval tv1, tv2;
-    struct timezone tz;
-    double elapsed;
 
     // initialize array
     size_t allocSize = N * sizeof(int);

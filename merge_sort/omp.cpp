@@ -108,12 +108,12 @@ int main(int argc, char **argv) {
     gettimeofday(&tv2, &tz);
     elapsed = (tv2.tv_sec - tv1.tv_sec) + (tv2.tv_usec - tv1.tv_usec) / 1000000.0;
     cout << "Time: " << elapsed << " seconds" << endl;
-    bool all_good = checkCorrectness(arr, N);
-    if (all_good) {
-        cout << "Correct!" << endl;
-    } else {
-        cout << "Incorrect!" << endl;
+    // bool all_good = checkCorrectness(arr, N);
+    // if (all_good) {
+    //     cout << "Correct!" << endl;
+    // } else {
+    //     cout << "Incorrect!" << endl;
         // printArray(arr, N);
-    }
+    // }
 
 }

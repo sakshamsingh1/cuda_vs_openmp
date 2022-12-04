@@ -1,0 +1,108 @@
+==3690817== Profiling application: ./mergesort_cuda 1000
+==3690817== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   91.37%  315.71us        10  31.571us  2.7200us  124.77us  merge_sort_kernel(int*, int*, int, int)
+                    7.43%  25.664us        10  2.5660us  2.4950us  2.9440us  [CUDA memcpy DtoD]
+                    0.75%  2.5920us         2  1.2960us  1.1200us  1.4720us  [CUDA memcpy HtoD]
+                    0.45%  1.5680us         1  1.5680us  1.5680us  1.5680us  [CUDA memcpy DtoH]
+      API calls:   99.38%  132.85ms         2  66.425ms  4.6860us  132.85ms  cudaMalloc
+                    0.28%  376.12us        13  28.931us  4.3690us  295.08us  cudaMemcpy
+                    0.17%  220.71us       101  2.1850us     119ns  97.955us  cuDeviceGetAttribute
+                    0.09%  126.94us         2  63.469us  6.0860us  120.85us  cudaFree
+                    0.04%  58.601us        10  5.8600us  3.2160us  24.332us  cudaLaunchKernel
+                    0.03%  34.399us         1  34.399us  34.399us  34.399us  cuDeviceGetName
+                    0.01%  6.8170us         1  6.8170us  6.8170us  6.8170us  cuDeviceGetPCIBusId
+                    0.00%  1.1120us         3     370ns     135ns     803ns  cuDeviceGetCount
+                    0.00%     688ns         2     344ns     141ns     547ns  cuDeviceGet
+                    0.00%     356ns         1     356ns     356ns     356ns  cuDeviceTotalMem
+                    0.00%     194ns         1     194ns     194ns     194ns  cuDeviceGetUuid
+==3690889== Profiling application: ./mergesort_cuda 10000
+==3690889== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   98.88%  4.1404ms        14  295.74us  2.6880us  1.3109ms  merge_sort_kernel(int*, int*, int, int)
+                    0.86%  36.031us        14  2.5730us  2.5280us  2.9760us  [CUDA memcpy DtoD]
+                    0.16%  6.4960us         2  3.2480us  3.2000us  3.2960us  [CUDA memcpy HtoD]
+                    0.10%  4.2880us         1  4.2880us  4.2880us  4.2880us  [CUDA memcpy DtoH]
+      API calls:   96.75%  139.70ms         2  69.850ms  4.2850us  139.70ms  cudaMalloc
+                    2.93%  4.2346ms        17  249.10us  4.2950us  4.1031ms  cudaMemcpy
+                    0.15%  220.32us       101  2.1810us     120ns  99.070us  cuDeviceGetAttribute
+                    0.09%  125.69us         2  62.845us  6.6060us  119.08us  cudaFree
+                    0.05%  72.571us        14  5.1830us  3.2160us  24.031us  cudaLaunchKernel
+                    0.02%  32.871us         1  32.871us  32.871us  32.871us  cuDeviceGetName
+                    0.00%  6.8520us         1  6.8520us  6.8520us  6.8520us  cuDeviceGetPCIBusId
+                    0.00%  1.5070us         3     502ns     163ns  1.1520us  cuDeviceGetCount
+                    0.00%     768ns         2     384ns     148ns     620ns  cuDeviceGet
+                    0.00%     281ns         1     281ns     281ns     281ns  cuDeviceTotalMem
+                    0.00%     231ns         1     231ns     231ns     231ns  cuDeviceGetUuid
+==3690904== Profiling application: ./mergesort_cuda 100000
+==3690904== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   99.57%  37.056ms        17  2.1798ms  2.7840us  12.305ms  merge_sort_kernel(int*, int*, int, int)
+                    0.19%  70.016us         2  35.008us  34.816us  35.200us  [CUDA memcpy HtoD]
+                    0.16%  58.461us        17  3.4380us  3.3600us  3.8720us  [CUDA memcpy DtoD]
+                    0.09%  31.872us         1  31.872us  31.872us  31.872us  [CUDA memcpy DtoH]
+      API calls:   77.21%  135.32ms         2  67.661ms  4.2510us  135.32ms  cudaMalloc
+                   21.38%  37.469ms        20  1.8735ms  4.3820us  37.115ms  cudaMemcpy
+                    1.16%  2.0322ms         1  2.0322ms  2.0322ms  2.0322ms  cuDeviceGetName
+                    0.13%  224.54us       101  2.2230us     121ns  100.91us  cuDeviceGetAttribute
+                    0.08%  135.02us         2  67.507us  8.7090us  126.31us  cudaFree
+                    0.05%  80.509us        17  4.7350us  3.1480us  23.622us  cudaLaunchKernel
+                    0.00%  7.4690us         1  7.4690us  7.4690us  7.4690us  cuDeviceGetPCIBusId
+                    0.00%  1.0890us         3     363ns     161ns     723ns  cuDeviceGetCount
+                    0.00%  1.0490us         2     524ns     113ns     936ns  cuDeviceGet
+                    0.00%     307ns         1     307ns     307ns     307ns  cuDeviceTotalMem
+                    0.00%     224ns         1     224ns     224ns     224ns  cuDeviceGetUuid
+==3690930== Profiling application: ./mergesort_cuda 1000000
+==3690930== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   99.09%  280.75ms        20  14.038ms  6.2720us  97.357ms  merge_sort_kernel(int*, int*, int, int)
+                    0.57%  1.6274ms         2  813.72us  689.82us  937.63us  [CUDA memcpy HtoD]
+                    0.21%  588.86us         1  588.86us  588.86us  588.86us  [CUDA memcpy DtoH]
+                    0.13%  364.00us        20  18.200us  15.520us  23.168us  [CUDA memcpy DtoD]
+      API calls:   65.74%  284.15ms        23  12.354ms  6.6660us  281.88ms  cudaMemcpy
+                   34.07%  147.26ms         2  73.630ms  172.29us  147.09ms  cudaMalloc
+                    0.10%  444.50us         2  222.25us  177.07us  267.43us  cudaFree
+                    0.05%  222.56us       101  2.2030us     119ns  101.52us  cuDeviceGetAttribute
+                    0.02%  97.955us        20  4.8970us  3.1950us  31.906us  cudaLaunchKernel
+                    0.01%  33.760us         1  33.760us  33.760us  33.760us  cuDeviceGetName
+                    0.00%  7.2950us         1  7.2950us  7.2950us  7.2950us  cuDeviceGetPCIBusId
+                    0.00%  1.2910us         3     430ns     141ns     953ns  cuDeviceGetCount
+                    0.00%     703ns         2     351ns     130ns     573ns  cuDeviceGet
+                    0.00%     370ns         1     370ns     370ns     370ns  cuDeviceTotalMem
+                    0.00%     198ns         1     198ns     198ns     198ns  cuDeviceGetUuid
+==3690985== Profiling application: ./mergesort_cuda 10000000
+==3690985== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   96.73%  939.07ms        21  44.718ms  41.024us  313.93ms  merge_sort_kernel(int*, int*, int, int)
+                    2.01%  19.551ms         2  9.7754ms  8.1640ms  11.387ms  [CUDA memcpy HtoD]
+                    0.84%  8.1098ms         1  8.1098ms  8.1098ms  8.1098ms  [CUDA memcpy DtoH]
+                    0.42%  4.0856ms        24  170.23us  164.99us  172.45us  [CUDA memcpy DtoD]
+      API calls:   86.69%  971.53ms        27  35.983ms  6.9970us  951.29ms  cudaMemcpy
+                   13.17%  147.56ms         2  73.778ms  153.99us  147.40ms  cudaMalloc
+                    0.11%  1.2500ms         2  624.98us  253.03us  996.93us  cudaFree
+                    0.02%  223.74us       101  2.2150us     119ns  99.786us  cuDeviceGetAttribute
+                    0.01%  110.86us        24  4.6190us     199ns  33.235us  cudaLaunchKernel
+                    0.00%  31.715us         1  31.715us  31.715us  31.715us  cuDeviceGetName
+                    0.00%  6.7960us         1  6.7960us  6.7960us  6.7960us  cuDeviceGetPCIBusId
+                    0.00%  1.1120us         3     370ns     178ns     734ns  cuDeviceGetCount
+                    0.00%     663ns         2     331ns     115ns     548ns  cuDeviceGet
+                    0.00%     248ns         1     248ns     248ns     248ns  cuDeviceTotalMem
+                    0.00%     228ns         1     228ns     228ns     228ns  cuDeviceGetUuid
+==3691034== Profiling application: ./mergesort_cuda 100000000
+==3691034== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   86.25%  2.55921s        21  121.87ms  375.29us  534.24ms  merge_sort_kernel(int*, int*, int, int)
+                    6.71%  199.10ms         2  99.551ms  83.072ms  116.03ms  [CUDA memcpy HtoD]
+                    5.53%  164.10ms         1  164.10ms  164.10ms  164.10ms  [CUDA memcpy DtoH]
+                    1.51%  44.886ms        27  1.6625ms  1.6361ms  1.6763ms  [CUDA memcpy DtoD]
+      API calls:   95.44%  2.96837s        30  98.946ms  6.6630us  2.76855s  cudaMemcpy
+                    4.45%  138.54ms         2  69.268ms  414.61us  138.12ms  cudaMalloc
+                    0.09%  2.9444ms         2  1.4722ms  515.70us  2.4287ms  cudaFree
+                    0.01%  225.06us       101  2.2280us     119ns  102.62us  cuDeviceGetAttribute
+                    0.00%  113.79us        27  4.2140us     171ns  40.727us  cudaLaunchKernel
+                    0.00%  31.593us         1  31.593us  31.593us  31.593us  cuDeviceGetName
+                    0.00%  6.4650us         1  6.4650us  6.4650us  6.4650us  cuDeviceGetPCIBusId
+                    0.00%  5.5100us         2  2.7550us     147ns  5.3630us  cuDeviceGet
+                    0.00%  1.2520us         3     417ns     178ns     879ns  cuDeviceGetCount
+                    0.00%     262ns         1     262ns     262ns     262ns  cuDeviceTotalMem
+                    0.00%     213ns         1     213ns     213ns     213ns  cuDeviceGetUuid

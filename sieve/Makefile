@@ -6,4 +6,4 @@ seq:
 cuda:
 	nvcc cuda.cu utils.cpp -o cuda_sieve -lstdc++ -lm
 clean:
-	rm -rf seq_sieve omp_sieve
+	rm -rf seq_sieve omp_sieve cuda_sieve

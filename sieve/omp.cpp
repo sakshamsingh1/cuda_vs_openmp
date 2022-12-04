@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     gettimeofday(&tv1, &tz);
     
     int lastNumberSqrt = ceil(sqrt(N));
-    #pragma omp target data map (from: is_composite[0:N]) 
+    #pragma omp target data map (tofrom: is_composite[0:N]) 
     for (int i = 2; i <= lastNumberSqrt; i += 1){
       if (!is_composite[i]){
         #pragma omp target teams distribute parallel for

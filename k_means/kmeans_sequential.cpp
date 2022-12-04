@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
 	
 	do{
 		int k=0, idx = 0;
-		while (k< K){
+		while (k < K_clusters){
 			clusters[k].size = 0;
 			k++;
 		}
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
 		
 		while(idx < n_pixels){
 			int min_dist = INT_MAX, min_cluster, dist;
-			for (int j = 0; j < K; ++j) {
+			for (int j = 0; j < K_clusters; ++j) {
 				dist = square((pixels[idx].x - clusters[j].x))+ square((pixels[idx].y - clusters[j].y));
 				if (dist < min_dist) {
 					min_dist = dist;
@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
 			idx++;
 		}
 
-	} while (recenter(n_pixels, K, pixels, clusters)==0);	//Loop Until Convergence of Centroids
+	} while (recenter(n_pixels, K_clusters, pixels, clusters)==0);	//Loop Until Convergence of Centroids
 
 	idx = 0;
 	unsigned char* out_image = (unsigned char*)calloc(total_pixels*3, sizeof(unsigned char*));

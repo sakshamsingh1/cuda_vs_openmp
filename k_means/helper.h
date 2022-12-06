@@ -7,32 +7,32 @@
 struct Point2d { // Point2D
 	uint32_t x;   
 	uint32_t y;   
-	int cluster=0; // the cluster id
-	Point2d(uint32_t x, uint32_t y, int c): x(x), y(y), cluster(c){}
+	int cluster = 0; // the cluster id
+	Point2d(uint32_t x, uint32_t y): x(x), y(y){}
 };
 
 // K-Means cluster central points
 struct Cluster {
 	uint32_t x;
 	uint32_t y;
-	size_t size; // the number of points in the cluster
-	int* points; // the point ids in the cluster
-	Cluster(uint32_t x, uint32_t y, size_t size, int* points):x(x), y(y), size(size), points(points){}
+	size_t size; // total points in the cluster
+	int* points; // ids of points in the cluster
 	Cluster():x(0), y(0), size(0){}
+	Cluster(uint32_t x, uint32_t y, size_t size, int* points):x(x), y(y), size(size), points(points){}
 };
 
-int write_png(const char* filename, unsigned char* image, unsigned int height, unsigned int width, unsigned int channels) {
+bool write_png(const char* filename, unsigned char* image, unsigned int height, unsigned int width, unsigned int channels) {
 	FILE* fp = fopen(filename, "wb");
 
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (!png_ptr) {
-		return 1;
+		return false;
 	}
 
 	png_infop info_ptr = png_create_info_struct(png_ptr);
 	if (!info_ptr) {
 		png_destroy_write_struct(&png_ptr, NULL);
-		return 1;
+		return false;
 	}
 
 	png_init_io(png_ptr, fp);
@@ -53,5 +53,5 @@ int write_png(const char* filename, unsigned char* image, unsigned int height, u
 	png_destroy_write_struct(&png_ptr, &info_ptr);
 
 	fclose(fp);
-	return 0;
+	return true;
 }

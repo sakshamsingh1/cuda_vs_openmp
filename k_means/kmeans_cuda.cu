@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <sys/time.h>
-#include "utils.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -23,17 +23,23 @@ __global__ void convergence_check(Cluster*, uint4*, bool*);
 int main(int argc, char * argv[]) {
 	
 	srand((unsigned) time(NULL));
-	if(argc != 4){
-		cout<<"usage: kmeans_cuda <K_CLUSTERS> <INPUT_FILE_PATH> <OUTPUT_FILE_PATH>"<<endl;
+	if(argc != 4 || argc != 6){
+		cout<<"usage: kmeans_cuda <K_CLUSTERS> <INPUT_FILE_PATH> <OUTPUT_FILE_PATH> [<total_blobs> <points_per_blob>]"<<endl;
         exit(1);
     }
 
 	const char *in_file, *out_file;
-	in_file = argv[2]; out_file = argv[3];
 	int K_clusters = atoi(argv[1]);
+	in_file = argv[2]; out_file = argv[3];
 	int total_blobs = 10;
 	int points_per_blob = 5000;
-	
+
+	// points in input PNG file
+	if (argc > 4) {
+		int total_blobs = atoi(argv[4]);
+		int points_per_blob = atoi(argv[5]);
+	}
+
 	int idx = 0, img_height = 600, img_width = 800;
 	int total_img_points = img_height * img_width;
 	// int total_blobs = 2 * K_clusters;
@@ -79,7 +85,7 @@ int main(int argc, char * argv[]) {
 		}
 	}
 
-	if ((write_png(in_file, in_image, img_height, img_width, 3)) != 0) {
+	if (!(write_png(in_file, in_image, img_height, img_width, 3))) {
 		cout<<"Failed to write the input .png file"<<endl;
 		exit(1);
 	}
@@ -168,7 +174,7 @@ int main(int argc, char * argv[]) {
 		idx++;
 	}
 
-	if ((write_png(out_file, out_image, img_height, img_width, 3)) != 0) {
+	if (!(write_png(out_file, out_image, img_height, img_width, 3))) {
 		cout<<"Failed to write the output .png file"<<endl;
 		exit(1);
 	}
@@ -198,17 +204,17 @@ __global__ void clustering(int total_img_points, int K_clusters, Point2d* points
 	int idx = threadIdx.x + blockDim.x * blockIdx.x;
 	if (idx < total_img_points){
 		Point2d point = points[idx];
-		int min = INT_MAX, min_cluster, dist, i=0;
+		int closest_cluster, dist, min = INT_MAX, i=0;
 
 		while (i < K_clusters){
 			dist = square((point.x - clusters[i].x))+ square((point.y - clusters[i].y));
 			if (dist < min) {
 				min = dist;
-				min_cluster = i;
+				closest_cluster = i;
 			}
 			i++;
 		}
-		points[idx].cluster = min_cluster;
+		points[idx].cluster = closest_cluster;
 	}
 }
 

@@ -23,37 +23,37 @@ __global__ void convergence_check(Cluster*, uint4*, bool*);
 int main(int argc, char * argv[]) {
 	
 	srand((unsigned) time(NULL));
-	if(argc != 4 || argc != 6){
-		cout<<"usage: kmeans_cuda <K_CLUSTERS> <INPUT_FILE_PATH> <OUTPUT_FILE_PATH> [<total_blobs> <points_per_blob>]"<<endl;
+	if(argc != 4 && argc != 6){
+		cout<<"usage: kmeans_cuda <K_CLUSTERS> <INPUT_FILE_PATH> <OUTPUT_FILE_PATH>"<<endl;
         exit(1);
     }
 
 	const char *in_file, *out_file;
 	int K_clusters = atoi(argv[1]);
 	in_file = argv[2]; out_file = argv[3];
-	int total_blobs = 10;
-	int points_per_blob = 5000;
+	int idx = 0;
+	unsigned int img_height, img_width, channels = 3;
+	unsigned char* in_image;
 
-	// points in input PNG file
-	if (argc > 4) {
-		int total_blobs = atoi(argv[4]);
-		int points_per_blob = atoi(argv[5]);
+	if (!read_png(in_file, &in_image, img_height, img_width, channels)) {
+		exit(1);
+	}
+	int total_img_points = img_height * img_width;
+	unsigned char* out_image = (unsigned char*)calloc(total_img_points*3, sizeof(unsigned char*));
+	int total_blob_points = get_total_blob_points(in_image, img_height, img_width);
+	Point2d* points = (Point2d*)calloc(total_blob_points, sizeof(Point2d));
+	int i=0, pt_idx = 0;
+	while(i < total_img_points){
+		if (in_image[3*i] == 0 && in_image[3*i+1] == 0 && in_image[3*i+2] == 0) {
+			points[pt_idx].x = i%img_width;
+			points[pt_idx].y = i/img_width;
+			points[pt_idx].cluster = -1;
+			pt_idx++;
+		}
+		i++;
 	}
 
-	int idx = 0, img_height = 600, img_width = 800;
-	int total_img_points = img_height * img_width;
-	// int total_blobs = 2 * K_clusters;
-	int blob_radius = 150;
-	int blob_centres[100][2];
-	int total_blob_points = total_blobs * points_per_blob;
-	Point2d* points = (Point2d*)calloc(total_blob_points, sizeof(Point2d));
-	unsigned char* in_image = (unsigned char*)calloc(total_img_points*3, sizeof(unsigned char*));
-	unsigned char* out_image = (unsigned char*)calloc(total_img_points*3, sizeof(unsigned char*));
-
-	while(idx < total_img_points){
-		in_image[3*idx] = 255;
-		in_image[3*idx+1] = 255;
-		in_image[3*idx+2] = 255;
+	while(idx < total_img_points) {
 		out_image[3*idx] = 255;
 		out_image[3*idx+1] = 255;
 		out_image[3*idx+2] = 255;
@@ -64,31 +64,6 @@ int main(int argc, char * argv[]) {
 	for (int i=0; i<K_clusters; i++) {
 		get_cluster_colors(cluster_colors[i], K_clusters, i);
 	}
-	
-	for (int i=0; i<total_blobs; i++) {
-		blob_centres[i][0] = rand()%(img_width - blob_radius); 
-		blob_centres[i][1] = rand()%(img_height - blob_radius); 
-	}
-	int p_idx = 0;
-	for (int i=0; i<total_blobs; i++) {
-		for (int j=0; j<points_per_blob; j++) {
-			int x = blob_centres[i][0] + rand()%blob_radius;
-			int y = blob_centres[i][1] + rand()%blob_radius;
-			int pos = img_width*y + x;
-			points[p_idx].x = x;
-			points[p_idx].y = y;
-			points[p_idx].cluster = -1;
-	 		in_image[3*pos] = 0;
-			in_image[3*pos+1] = 0;
-			in_image[3*pos+2] = 0;
-			p_idx++;	
-		}
-	}
-
-	if (!(write_png(in_file, in_image, img_height, img_width, 3))) {
-		cout<<"Failed to write the input .png file"<<endl;
-		exit(1);
-	}
 
 	Cluster* clusters = (Cluster*)calloc(K_clusters, sizeof(Cluster));
 	std::random_device rd;
@@ -98,7 +73,7 @@ int main(int argc, char * argv[]) {
 	struct timeval tv1, tv2;	
     struct timezone tz;	
     double elapsed;
-	int i=0;
+	i=0;
     gettimeofday(&tv1, &tz);	
 
 	//Initialize clusters by assigning a random 2D Point to the cluster
@@ -207,7 +182,7 @@ __global__ void clustering(int total_img_points, int K_clusters, Point2d* points
 		int closest_cluster, dist, min = INT_MAX, i=0;
 
 		while (i < K_clusters){
-			dist = square((point.x - clusters[i].x))+ square((point.y - clusters[i].y));
+			dist = square((point.x - clusters[i].x)) + square((point.y - clusters[i].y));
 			if (dist < min) {
 				min = dist;
 				closest_cluster = i;

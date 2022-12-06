@@ -1,12 +1,11 @@
+seq:
+	g++ -lpng -std=c++11 kmeans_sequential.cpp -o kmeans_seq
 
-kmeans_seq.out:kmeans_sequential.cpp
-	g++ -lpng -std=c++11 kmeans_sequential.cpp -o kmeans_sequential
+omp:
+	/scratch/am10150/offload/install/bin/g++ -fopenmp -lpng -std=c++11 kmeans_omp.cpp -o kmeans_omp
 
-kmeans_omp.out:kmeans_omp.cpp
-	g++ -fopenmp -lpng -std=c++11 kmeans_omp.cpp -o kmeans_omp
-
-kmeans_cuda.out:kmeans_cuda.cu
+cuda:
 	nvcc -lpng -std=c++11 kmeans_cuda.cu -o kmeans_cuda
 
 clean:
-	rm -rf *.out
+	rm -rf kmeans_seq kmeans_omp kmeans_cuda

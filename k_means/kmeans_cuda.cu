@@ -23,7 +23,7 @@ __global__ void convergence_check(Cluster*, uint4*, bool*);
 int main(int argc, char * argv[]) {
 	
 	srand((unsigned) time(NULL));
-	if(argc != 4 && argc != 6){
+	if(argc != 4){
 		cout<<"usage: kmeans_cuda <K_CLUSTERS> <INPUT_FILE_PATH> <OUTPUT_FILE_PATH>"<<endl;
         exit(1);
     }
